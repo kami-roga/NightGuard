@@ -13,9 +13,7 @@ body {
     padding: 40px;
 }
 
-h1 {
-    margin-bottom: 5px;
-}
+h1 { margin-bottom: 5px; }
 
 .subtitle {
     color: #9ca3af;
@@ -29,7 +27,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-input {
+.search-container input {
     flex: 1;
     padding: 12px;
     border-radius: 10px;
@@ -47,9 +45,7 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    opacity: 0.9;
-}
+button:hover { opacity: 0.9; }
 
 /* Venue Cards */
 .venue {
@@ -59,9 +55,7 @@ button:hover {
     margin-bottom: 15px;
 }
 
-.venue h3 {
-    margin: 0;
-}
+.venue h3 { margin: 0; }
 
 .venue p {
     margin: 5px 0;
@@ -74,12 +68,54 @@ button:hover {
     font-size: 12px;
 }
 
-.open {
-    background: #065f46;
+.open { background: #065f46; }
+.closed { background: #374151; }
+
+/* ================= MODAL ================= */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: none;
+    justify-content: center;
+    align-items: center;
 }
 
-.closed {
-    background: #374151;
+.modal {
+    background: #0f172a;
+    padding: 30px;
+    border-radius: 20px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-btn {
+    cursor: pointer;
+    font-size: 18px;
+    opacity: 0.7;
+}
+
+.close-btn:hover { opacity: 1; }
+
+.modal input {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #1f2937;
+    color: white;
+}
+
+.modal button {
+    margin-top: 10px;
 }
 </style>
 </head>
@@ -91,32 +127,76 @@ button:hover {
 
 <div class="search-container">
     <input type="text" id="searchInput" placeholder="Search venues...">
-    <button onclick="addVenue()">Add Venue</button>
+    <button onclick="openModal()">+ Add Venue</button>
 </div>
 
 <div id="venueList"></div>
 
+<!-- ========== MODAL ========== -->
+
+<div id="modalOverlay" class="modal-overlay">
+  <div class="modal">
+
+    <div class="modal-header">
+      <h2>Add Venue</h2>
+      <span class="close-btn" onclick="closeModal()">✕</span>
+    </div>
+
+    <input type="text" id="venueName" placeholder="Venue Name">
+    <input type="text" id="venueAddress" placeholder="Address">
+    
+    <label>Opens</label>
+    <input type="time" id="venueOpenTime">
+
+    <label>Closes</label>
+    <input type="time" id="venueCloseTime">
+
+    <button onclick="saveVenue()">Add Venue</button>
+
+  </div>
+</div>
+
 <script>
 let venues = [
-    { name: "Deer Park", address: "108 W Main St", hours: "11:30 AM – 01:00 AM", open: true },
-    { name: "Klondike Kate's", address: "158 E Main St", hours: "10:00 AM – 01:00 AM", open: false },
-    { name: "Grotto's", address: "45 E Main St #100", hours: "11:00 AM – 01:00 AM", open: true }
+    { name: "Deer Park", address: "108 W Main St", openTime: "11:30", closeTime: "01:00" },
+    { name: "Klondike Kate's", address: "158 E Main St", openTime: "10:00", closeTime: "01:00" },
+    { name: "Grotto's", address: "45 E Main St #100", openTime: "11:00", closeTime: "01:00" }
 ];
 
-function renderVenues(filteredVenues) {
+function isOpenNow(openTime, closeTime) {
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    const [openH, openM] = openTime.split(":").map(Number);
+    const [closeH, closeM] = closeTime.split(":").map(Number);
+
+    const openMinutes = openH * 60 + openM;
+    const closeMinutes = closeH * 60 + closeM;
+
+    // Handles venues that close after midnight
+    if (closeMinutes < openMinutes) {
+        return currentMinutes >= openMinutes || currentMinutes <= closeMinutes;
+    }
+
+    return currentMinutes >= openMinutes && currentMinutes <= closeMinutes;
+}
+
+function renderVenues(list) {
     const venueList = document.getElementById("venueList");
     venueList.innerHTML = "";
 
-    filteredVenues.forEach(venue => {
+    list.forEach(venue => {
+        const open = isOpenNow(venue.openTime, venue.closeTime);
+
         const div = document.createElement("div");
         div.className = "venue";
 
         div.innerHTML = `
             <h3>${venue.name}</h3>
             <p>${venue.address}</p>
-            <p>${venue.hours} 
-                <span class="status ${venue.open ? 'open' : 'closed'}">
-                    ${venue.open ? "Open" : "Closed"}
+            <p>${venue.openTime} – ${venue.closeTime} 
+                <span class="status ${open ? 'open' : 'closed'}">
+                    ${open ? "Open" : "Closed"}
                 </span>
             </p>
         `;
@@ -125,20 +205,35 @@ function renderVenues(filteredVenues) {
     });
 }
 
-function addVenue() {
-    const name = prompt("Venue Name:");
-    const address = prompt("Address:");
-    const hours = prompt("Hours (e.g. 18:00 – 02:00):");
+function openModal() {
+    document.getElementById("modalOverlay").style.display = "flex";
+}
 
-    if (name && address && hours) {
-        venues.push({
-            name,
-            address,
-            hours,
-            open: false
-        });
-        renderVenues(venues);
+function closeModal() {
+    document.getElementById("modalOverlay").style.display = "none";
+}
+
+function saveVenue() {
+    const name = document.getElementById("venueName").value;
+    const address = document.getElementById("venueAddress").value;
+    const openTime = document.getElementById("venueOpenTime").value;
+    const closeTime = document.getElementById("venueCloseTime").value;
+
+    if (!name || !address || !openTime || !closeTime) {
+        alert("Please fill in all fields.");
+        return;
     }
+
+    venues.push({ name, address, openTime, closeTime });
+
+    renderVenues(venues);
+    closeModal();
+
+    // Clear form
+    document.getElementById("venueName").value = "";
+    document.getElementById("venueAddress").value = "";
+    document.getElementById("venueOpenTime").value = "";
+    document.getElementById("venueCloseTime").value = "";
 }
 
 document.getElementById("searchInput").addEventListener("input", function() {
