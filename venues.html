@@ -20,7 +20,6 @@ h1 { margin-bottom: 5px; }
     margin-bottom: 20px;
 }
 
-/* Search Bar */
 .search-container {
     display: flex;
     gap: 10px;
@@ -47,9 +46,7 @@ button {
 
 button:hover { opacity: 0.9; }
 
-/* Venue Cards */
 .venue {
-    background: linear-gradient(90deg, #134e4a, #0f172a);
     padding: 20px;
     border-radius: 20px;
     margin-bottom: 15px;
@@ -71,7 +68,7 @@ button:hover { opacity: 0.9; }
 .open { background: #065f46; }
 .closed { background: #374151; }
 
-/* ================= MODAL ================= */
+/* Modal */
 
 .modal-overlay {
     position: fixed;
@@ -132,11 +129,10 @@ button:hover { opacity: 0.9; }
 
 <div id="venueList"></div>
 
-<!-- ========== MODAL ========== -->
+<!-- Modal -->
 
 <div id="modalOverlay" class="modal-overlay">
   <div class="modal">
-
     <div class="modal-header">
       <h2>Add Venue</h2>
       <span class="close-btn" onclick="closeModal()">✕</span>
@@ -152,16 +148,34 @@ button:hover { opacity: 0.9; }
     <input type="time" id="venueCloseTime">
 
     <button onclick="saveVenue()">Add Venue</button>
-
   </div>
 </div>
 
 <script>
-let venues = [
-    { name: "Deer Park", address: "108 W Main St", openTime: "11:30", closeTime: "01:00" },
-    { name: "Klondike Kate's", address: "158 E Main St", openTime: "10:00", closeTime: "01:00" },
-    { name: "Grotto's", address: "45 E Main St #100", openTime: "11:00", closeTime: "01:00" }
+
+/* ================= ROTATING COLOR PALETTE ================= */
+
+const gradients = [
+    "linear-gradient(90deg, #134e4a, #0f172a)",
+    "linear-gradient(90deg, #1e3a8a, #0f172a)",
+    "linear-gradient(90deg, #4c1d95, #0f172a)",
+    "linear-gradient(90deg, #7c2d12, #0f172a)",
+    "linear-gradient(90deg, #065f46, #0f172a)"
 ];
+
+let gradientIndex = 0;
+
+/* ================= VENUES ================= */
+
+let venues = [
+    { name: "Deer Park", address: "108 W Main St", openTime: "11:30", closeTime: "01:00", gradient: gradients[0] },
+    { name: "Klondike Kate's", address: "158 E Main St", openTime: "10:00", closeTime: "01:00", gradient: gradients[1] },
+    { name: "Grotto's", address: "45 E Main St #100", openTime: "11:00", closeTime: "01:00", gradient: gradients[2] }
+];
+
+gradientIndex = venues.length; // Continue rotation after defaults
+
+/* ================= OPEN/CLOSED LOGIC ================= */
 
 function isOpenNow(openTime, closeTime) {
     const now = new Date();
@@ -173,13 +187,14 @@ function isOpenNow(openTime, closeTime) {
     const openMinutes = openH * 60 + openM;
     const closeMinutes = closeH * 60 + closeM;
 
-    // Handles venues that close after midnight
     if (closeMinutes < openMinutes) {
         return currentMinutes >= openMinutes || currentMinutes <= closeMinutes;
     }
 
     return currentMinutes >= openMinutes && currentMinutes <= closeMinutes;
 }
+
+/* ================= RENDER ================= */
 
 function renderVenues(list) {
     const venueList = document.getElementById("venueList");
@@ -190,6 +205,7 @@ function renderVenues(list) {
 
         const div = document.createElement("div");
         div.className = "venue";
+        div.style.background = venue.gradient;
 
         div.innerHTML = `
             <h3>${venue.name}</h3>
@@ -204,6 +220,8 @@ function renderVenues(list) {
         venueList.appendChild(div);
     });
 }
+
+/* ================= MODAL FUNCTIONS ================= */
 
 function openModal() {
     document.getElementById("modalOverlay").style.display = "flex";
@@ -224,17 +242,26 @@ function saveVenue() {
         return;
     }
 
-    venues.push({ name, address, openTime, closeTime });
+    venues.push({
+        name,
+        address,
+        openTime,
+        closeTime,
+        gradient: gradients[gradientIndex % gradients.length]
+    });
+
+    gradientIndex++;
 
     renderVenues(venues);
     closeModal();
 
-    // Clear form
     document.getElementById("venueName").value = "";
     document.getElementById("venueAddress").value = "";
     document.getElementById("venueOpenTime").value = "";
     document.getElementById("venueCloseTime").value = "";
 }
+
+/* ================= SEARCH ================= */
 
 document.getElementById("searchInput").addEventListener("input", function() {
     const searchValue = this.value.toLowerCase();
@@ -245,7 +272,7 @@ document.getElementById("searchInput").addEventListener("input", function() {
 });
 
 renderVenues(venues);
-</script>
 
+</script>
 </body>
 </html>
