@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bars & Venues</title>
+
+<style>
+body {
+    background: #0d1117;
+    font-family: Arial, sans-serif;
+    color: white;
+    padding: 40px;
+}
+
+h1 {
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #9ca3af;
+    margin-bottom: 20px;
+}
+
+/* Search Bar */
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #1f2937;
+    color: white;
+}
+
+button {
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    background: #7c3aed;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* Venue Cards */
+.venue {
+    background: linear-gradient(90deg, #134e4a, #0f172a);
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+}
+
+.venue h3 {
+    margin: 0;
+}
+
+.venue p {
+    margin: 5px 0;
+    color: #cbd5e1;
+}
+
+.status {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.open {
+    background: #065f46;
+}
+
+.closed {
+    background: #374151;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Bars & Venues</h1>
+<p class="subtitle">Get notified about closing times</p>
+
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search venues...">
+    <button onclick="addVenue()">Add Venue</button>
+</div>
+
+<div id="venueList"></div>
+
+<script>
+let venues = [
+    { name: "Deer Park", address: "108 W Main St", hours: "11:30 AM – 01:00 AM", open: true },
+    { name: "Klondike Kate's", address: "158 E Main St", hours: "10:00 AM – 01:00 AM", open: false },
+    { name: "Grotto's", address: "45 E Main St #100", hours: "11:00 AM – 01:00 AM", open: true }
+];
+
+function renderVenues(filteredVenues) {
+    const venueList = document.getElementById("venueList");
+    venueList.innerHTML = "";
+
+    filteredVenues.forEach(venue => {
+        const div = document.createElement("div");
+        div.className = "venue";
+
+        div.innerHTML = `
+            <h3>${venue.name}</h3>
+            <p>${venue.address}</p>
+            <p>${venue.hours} 
+                <span class="status ${venue.open ? 'open' : 'closed'}">
+                    ${venue.open ? "Open" : "Closed"}
+                </span>
+            </p>
+        `;
+
+        venueList.appendChild(div);
+    });
+}
+
+function addVenue() {
+    const name = prompt("Venue Name:");
+    const address = prompt("Address:");
+    const hours = prompt("Hours (e.g. 18:00 – 02:00):");
+
+    if (name && address && hours) {
+        venues.push({
+            name,
+            address,
+            hours,
+            open: false
+        });
+        renderVenues(venues);
+    }
+}
+
+document.getElementById("searchInput").addEventListener("input", function() {
+    const searchValue = this.value.toLowerCase();
+    const filtered = venues.filter(v =>
+        v.name.toLowerCase().includes(searchValue)
+    );
+    renderVenues(filtered);
+});
+
+renderVenues(venues);
+</script>
+
+</body>
+</html>
