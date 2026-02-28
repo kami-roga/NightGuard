@@ -3,15 +3,22 @@
 <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>My Portfolio</title>
 
         <!-- Font Awesome (for icons) -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
         <style>
-            /* .navbar {
-                background-color:dimgray;
-                overflow:hidden;
+            .navbar {
+                /* overflow:hidden; */
+                /* text-align:center; */
+            }
+            .navbar-container {
+                display: flex;
+                justify-content: center;
+                /* Optional: Add other styling */
+                width: 100%;
+                /* padding: 10px 0; */
+                /* padding:100px; */
             }
 
             .navbar a {
@@ -23,7 +30,7 @@
 
             .navbar a:hover {
                 background-color:#04AA6D;
-            } */
+            }
             body{
                 background-color:black;
             }
@@ -36,6 +43,14 @@
                 background-color:gray;
                 border-color:gray;
                 color:white;
+            }
+            a{
+                color:white;
+                text-decoration:none;
+                margin:15px;
+            }
+            hr{
+                background-color:white;
             }
         </style>
     </head>
@@ -50,40 +65,41 @@
         </h2>
         <h5 style="color:white; text-align:center">10:34 pm</h5>
         <div class="d-flex gap-2">            
-            <button type="button" class="container btn btn-warning m-2 py-4 ">
+            <a href="ride.html" type="button" class="container btn btn-warning m-2 py-4 ">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-taxi-front-fill" viewBox="0 0 16 16">
                     <path d="M6 1a1 1 0 0 0-1 1v1h-.181A2.5 2.5 0 0 0 2.52 4.515l-.792 1.848a.8.8 0 0 1-.38.404c-.5.25-.855.715-.965 1.262L.05 9.708a2.5 2.5 0 0 0-.049.49v.413c0 .814.39 1.543 1 1.997V14.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1.338c1.292.048 2.745.088 4 .088s2.708-.04 4-.088V14.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1.892c.61-.454 1-1.183 1-1.997v-.413q0-.248-.049-.49l-.335-1.68a1.8 1.8 0 0 0-.964-1.261.8.8 0 0 1-.381-.404l-.792-1.848A2.5 2.5 0 0 0 11.181 3H11V2a1 1 0 0 0-1-1zM4.309 4h7.382a.5.5 0 0 1 .447.276l.956 1.913a.51.51 0 0 1-.497.731c-.91-.073-3.35-.17-4.597-.17s-3.688.097-4.597.17a.51.51 0 0 1-.497-.731l.956-1.913A.5.5 0 0 1 4.309 4M4 10a1 1 0 1 1-2 0 1 1 0 0 1 2 0m10 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-9 0a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1"/>
                 </svg>
                 Ride Share
-            </button>
-            <button type="button" class="container btn btn-success m-2 py-4 ">
+            </a>
+            <a href="routes.html" class="container btn btn-success m-2 py-4 ">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-walking" viewBox="0 0 16 16">
                     <path d="M9.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M6.44 3.752A.75.75 0 0 1 7 3.5h1.445c.742 0 1.32.643 1.243 1.38l-.43 4.083a1.8 1.8 0 0 1-.088.395l-.318.906.213.242a.8.8 0 0 1 .114.175l2 4.25a.75.75 0 1 1-1.357.638l-1.956-4.154-1.68-1.921A.75.75 0 0 1 6 8.96l.138-2.613-.435.489-.464 2.786a.75.75 0 1 1-1.48-.246l.5-3a.75.75 0 0 1 .18-.375l2-2.25Z"/>
                     <path d="M6.25 11.745v-1.418l1.204 1.375.261.524a.8.8 0 0 1-.12.231l-2.5 3.25a.75.75 0 1 1-1.19-.914zm4.22-4.215-.494-.494.205-1.843.006-.067 1.124 1.124h1.44a.75.75 0 0 1 0 1.5H11a.75.75 0 0 1-.531-.22Z"/>
                 </svg>
                 Safe Route
-            </button>
+            </a>
 
         </div>
         <div class="d-flex gap-2">            
-            <button type="button" class="container btn btn-danger m-2 py-4 ">
+            <a href="friends.html" type="button" class="container btn btn-danger m-2 py-4 ">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
                     <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
                 </svg>
                 Friends
-            </button>
-            <button type="button" class="container btn btn-info m-2 py-4">
+            </a>
+            <a href="eta.html" type="button" class="container btn btn-info m-2 py-4">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
                     <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
                 </svg>
                 Share ETA
-            </button>
+            </a>
         </div>
-        <!-- <div class="navbar">
+        <hr>
+        <div class="fixed-bottom navbar-container">
             <a href="#">Home</a>
             <a href="#">About</a>
             <a href="#">Services</a>
             <a href="#">Contact</a>
-        </div> -->
+        </div>
     </body>
 </html>
