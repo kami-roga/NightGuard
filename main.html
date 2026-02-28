@@ -3,7 +3,7 @@
     <head>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
         <style>
-            .navbar {
+            /* .navbar {
                 background-color:dimgray;
                 overflow:hidden;
             }
@@ -17,20 +17,28 @@
 
             .navbar a:hover {
                 background-color:#04AA6D;
+            } */
+            body{
+                background-color:black;
+            }
+            .btn{
+                color:white;
+                border-color:white;
             }
         </style>
     </head>
     <body>
 
-        <div class="navbar">
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Services</a>
-        <a href="#">Contact</a>
+        <h2 style="color:white; text-align:center">NightSafe</h2>
+        <div class="d-flex flex-fill">            
+            <button type="button" class="container d-inline-flex btn btn-outline-dark">Uber</button>
+            <button type="button" class="container d-inline-flex btn btn-outline-dark">Lyft</button>
         </div>
-
-        <h2>Welcome</h2>
-        <p>This is a horizontal navigation bar.</p>
-
+        <!-- <div class="navbar">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="#">Contact</a>
+        </div> -->
     </body>
 </html>
