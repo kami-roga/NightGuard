@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>NightSafe - Rideshares</title>
 
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body{
+            background-color:#070424;
+        }
+        h2{
+            color:white;
+            text-align:center;
+            margin-top:40px;
+        }
+        .btn{
+            color:white;
+            border-color:none;
+            text-align:left;
+        }
+        .uber-btn{
+            background-color:#0a1f44;
+        }
+        .lyft-btn{
+            background-color:#ff2da1;
+        }
+        .curb-btn{
+            background-color:#FF6200;
+        }
+        .bolt-btn{
+            background-color:#00E613;
+        }
+        .btn:hover{
+            opacity:0.85
+        }
+    </style>
+</head>
+<footer class="text-center text-white mt-5 mb-3 px-4">
+    <hr style="border-color: white; opacity: 0.3;">
+    <p style="font-size: 14px;">
+        Safety Tip: Always verify the driver's identity and vehicle details before getting 
+        into a rideshare. Check the license plate, driver's name, and photo to ensure they 
+        match the information provided in the app. If anything seems off, do not get in and 
+        report it to the rideshare company immediately.
+    </p>
+</footer>
+<body>
+    <h2>Rideshares</h2>
+    <div class="d-flex flex-column gap-3 m-4">
+    <a href="https://www.uber.com/" target="_blank" class="text-decoration-none">
+        <button type="button" class="btn uber-btn py-4 w-100">
+            Uber
+        </button>
+    </a>
+    <a href="https://www.lyft.com/" target="_blank" class="text-decoration-none">
+        <button type="button" class="btn lyft-btn py-4 w-100">
+            Lyft
+        </button>
+    </a>
+    <a href="https://www.gocurb.com/" target="_blank" class="text-decoration-none">
+                <button type="button" class="btn curb-btn py-4 w-100">
+            Curb
+        </button>
+    </a>
+    <a href="https://www.bolt.eu/" target="_blank" class="text-decoration-none">
+                <button type="button" class="btn bolt-btn py-4 w-100">
+            Bolt
+        </button>
+    </a>
+    </div>
+
+</body>
+</html>
