@@ -3,39 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Routes</title>
+  <title>Safe Routes</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 
   <style>
-    .navbar-container {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-    }
-
-    .navbar a {
-      color:white;
-      padding:14px 16px;
-      text-decoration:none;
-    }
-
-    a{
-      color:white;
-      text-decoration:none;
-      margin:15px;
-    }
-
     body{
       margin:0;
-      /* add bottom padding so the fixed-bottom nav doesn't cover content */
-      padding:40px 18px 120px;
+      padding:40px 18px 140px; /* space for bottom navbar */
       background:#0d1117;
       color:#fff;
       font-family: Arial, sans-serif;
     }
-
     .app{max-width:1100px;margin:0 auto;}
 
     .panel{
@@ -45,7 +25,6 @@
       align-items:flex-end;
       margin: 18px 0;
     }
-
     .field{
       flex:1;
       min-width:220px;
@@ -53,9 +32,7 @@
       flex-direction:column;
       gap:8px;
     }
-
     label{color:#cbd5e1;font-size:13px;}
-
     input{
       padding:12px;
       border-radius:10px;
@@ -65,7 +42,6 @@
       color:#fff;
       font-size:15px;
     }
-
     button{
       padding:12px 20px;
       border-radius:10px;
@@ -75,9 +51,7 @@
       font-weight:700;
       cursor:pointer;
     }
-
     button:hover{opacity:.92}
-
     .secondary{background:#334155;font-weight:600;}
 
     .mapWrap{
@@ -86,8 +60,102 @@
       border:1px solid rgba(255,255,255,.08);
       background:#0b1220;
     }
-
     img{display:block;width:100%;height:auto;}
+
+    /* --- Recommended routes section --- */
+    .sectionHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin: 22px 0 12px;
+    }
+    .sectionHeader h2{
+      font-size:22px;
+      margin:0;
+      font-weight:800;
+    }
+    .viewAll{
+      color:#a78bfa;
+      text-decoration:none;
+      font-weight:700;
+    }
+    .routesList{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .routeCard{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      padding:18px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    }
+
+    .score{
+      width:64px;
+      height:64px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      font-size:22px;
+      font-weight:900;
+      border:3px solid rgba(16,185,129,.35);
+      color:#34d399;
+      flex: 0 0 auto;
+      background: rgba(16,185,129,.08);
+    }
+    .score.mid{
+      border-color: rgba(245,158,11,.35);
+      color:#fbbf24;
+      background: rgba(245,158,11,.08);
+    }
+    .score.low{
+      border-color: rgba(239,68,68,.35);
+      color:#fca5a5;
+      background: rgba(239,68,68,.08);
+    }
+
+    .routeMain{flex:1;}
+    .routeTitle{margin:0 0 6px; font-size:22px; font-weight:850;}
+    .routeSubtitle{margin:0 0 10px; color:#94a3b8; font-size:16px;}
+
+    .pillRow{display:flex; flex-wrap:wrap; gap:10px; align-items:center; color:#94a3b8;}
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 12px;
+      border-radius:999px;
+      font-weight:800;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+    }
+    .pill.good{ color:#34d399; background: rgba(16,185,129,.10); border-color: rgba(16,185,129,.18); }
+    .pill.warn{ color:#fbbf24; background: rgba(245,158,11,.10); border-color: rgba(245,158,11,.18); }
+
+    .meta{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-left: 6px;
+    }
+
+    /* hide until Go */
+    #recommendedSection{ display:none; }
+
+    /* optional: navbar container style if you use the same as main.html */
+    .navbar-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      background:#0b1220;
+      border-top:1px solid rgba(255,255,255,.08);
+      padding: 10px 0;
+    }
+    a{ color:white; text-decoration:none; margin:15px; }
   </style>
 </head>
 
@@ -114,6 +182,16 @@
     <div class="mapWrap">
       <img id="mapImage" src="images/blank_map.png" alt="Map" />
     </div>
+
+    <!-- Recommended routes (hidden until Go) -->
+    <section id="recommendedSection">
+      <div class="sectionHeader">
+        <h2>Recommended Routes</h2>
+        <a class="viewAll" href="#" onclick="event.preventDefault()">View all ›</a>
+      </div>
+
+      <div id="routesList" class="routesList"></div>
+    </section>
   </div>
 
   <script>
@@ -124,23 +202,105 @@
     const mapImage = document.getElementById("mapImage");
     const resetBtn = document.getElementById("resetBtn");
 
-    // Ensure the blank map is shown on load
+    const recommendedSection = document.getElementById("recommendedSection");
+    const routesListEl = document.getElementById("routesList");
+
+
+   const SAMPLE_ROUTES = [
+  {
+    score: 92,
+    name: "via The Green/The GRN and E Main St",
+    fromTo: `${document.getElementById("start").value || "Start"} → ${document.getElementById("dest").value || "Destination"}`,
+    lighting: "Well Lit",
+    crime: "Low Crime",
+    durationMin: 13,
+    distance: 0.6,
+    distanceUnit: "mile"
+  },
+  {
+    score: 85,
+    name: "via E Delaware Ave and E Main St",
+    fromTo: `${document.getElementById("start").value || "Start"} → ${document.getElementById("dest").value || "Destination"}`,
+    lighting: "Well Lit",
+    crime: "Low Crime",
+    durationMin: 13,
+    distance: 0.6,
+    distanceUnit: "mile"
+  },
+  {
+    score: 68,
+    name: "via S College Ave and E Main St",
+    fromTo: `${document.getElementById("start").value || "Start"} → ${document.getElementById("dest").value || "Destination"}`,
+    lighting: "Moderate",
+    crime: "Moderate",
+    durationMin: 14,
+    distance: 0.6,
+    distanceUnit: "mile"
+  }
+];
+
+    function scoreClass(score){
+      if (score >= 80) return "";
+      if (score >= 60) return "mid";
+      return "low";
+    }
+
+    function pillClass(label){
+      const v = String(label).toLowerCase();
+      if (v.includes("low") || v.includes("well")) return "good";
+      return "warn";
+    }
+
+    function renderRecommendedRoutes(routes){
+      routesListEl.innerHTML = "";
+
+      routes.forEach(r => {
+        const card = document.createElement("div");
+        card.className = "routeCard";
+
+        card.innerHTML = `
+          <div class="score ${scoreClass(r.score)}">${r.score}</div>
+          <div class="routeMain">
+            <div class="routeTitle">${r.name}</div>
+            <div class="routeSubtitle"><i class="fa-solid fa-location-dot"></i> ${r.fromTo}</div>
+
+            <div class="pillRow">
+              <span class="pill ${pillClass(r.lighting)}"><i class="fa-solid fa-sun"></i> ${r.lighting}</span>
+              <span class="pill ${pillClass(r.crime)}"><i class="fa-solid fa-shield"></i> ${r.crime}</span>
+
+              <span class="meta"><i class="fa-regular fa-clock"></i> ${r.durationMin} min</span>
+              <span class="meta"><i class="fa-solid fa-route"></i> ${r.distanceKm} km</span>
+            </div>
+          </div>
+        `;
+
+        routesListEl.appendChild(card);
+      });
+    }
+
+    // initial state
     mapImage.src = BLANK_SRC;
 
-    // Clicking "Go" swaps to the routes map
     form.addEventListener("submit", (e) => {
       e.preventDefault();
+
+      // 1) swap the map
       mapImage.src = ROUTES_SRC;
+
+      // 2) show + render recommended routes
+      recommendedSection.style.display = "block";
+      renderRecommendedRoutes(SAMPLE_ROUTES);
     });
 
-    // Reset back to blank
     resetBtn.addEventListener("click", () => {
       form.reset();
       mapImage.src = BLANK_SRC;
+      recommendedSection.style.display = "none";
+      routesListEl.innerHTML = "";
     });
   </script>
 
-  <!-- Bottom navbar copied from main.html -->
+  <!-- If you already have a bottom navbar in main.html, paste that exact block here -->
   <div class="fixed-bottom navbar-container">
     <a href="main.html">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
@@ -148,14 +308,12 @@
       </svg>
       Home
     </a>
-
     <a href="friends.html">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
         <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
       </svg>
       Friends
     </a>
-
     <a href="map.html">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-map-fill" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.598-.49L10.5.99 5.598.01a.5.5 0 0 0-.196 0l-5 1A.5.5 0 0 0 0 1.5v14a.5.5 0 0 0 .598.49l4.902-.98 4.902.98a.5.5 0 0 0 .196 0l5-1A.5.5 0 0 0 16 14.5zM5 14.09V1.11l.5-.1.5.1v12.98l-.402-.08a.5.5 0 0 0-.196 0zm5 .8V1.91l.402.08a.5.5 0 0 0 .196 0L11 1.91v12.98l-.5.1z"/>
