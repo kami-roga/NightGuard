@@ -1,59 +1,109 @@
-
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html lang="en">
 <head>
-    <style type="text/css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Routes</title>
+  <style>
+    body{
+      margin:0;
+      padding:40px 18px 60px;
+      background:#0d1117;
+      color:#fff;
+      font-family: Arial, sans-serif;
+    }
+    .app{max-width:1100px;margin:0 auto;}
+    .panel{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:flex-end;
+      margin: 18px 0;
+    }
+    .field{
+      flex:1;
+      min-width:220px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    label{color:#cbd5e1;font-size:13px;}
+    input{
+      padding:12px;
+      border-radius:10px;
+      border:none;
+      outline:none;
+      background:#1f2937;
+      color:#fff;
+      font-size:15px;
+    }
+    button{
+      padding:12px 20px;
+      border-radius:10px;
+      border:none;
+      background:#7c3aed;
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+    }
+    button:hover{opacity:.92}
+    .secondary{background:#334155;font-weight:600;}
 
-        /* Set the size of the div element 
-        that contains the map */
-        #map {
-            height: 400px;
-            width: 400px;
-        }
-        
-        h2 {
-            color: #308d46;
-        }
-    </style>
+    .mapWrap{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      background:#0b1220;
+    }
+    img{display:block;width:100%;height:auto;}
+  </style>
 </head>
-
 <body>
-    <h2>
-        Add Google Map on Your 
-        Webpage: Geeksforgeeks
-    </h2>
+  <div class="app">
+    <h1>Routes</h1>
 
-    <!--The div element for the map -->
-    <div id="map"></div>
+    <form id="routeForm" class="panel">
+      <div class="field">
+        <label for="start">Start location</label>
+        <input id="start" name="start" placeholder="Enter start..." />
+      </div>
 
-    <!--Add a script by google -->
-    <script src=
-"https://maps.googleapis.com/maps/api/js?key=<YOUR_API_KEY>&callback=initMap&libraries=&v=weekly"
-        async>
-    </script>
+      <div class="field">
+        <label for="dest">Destination</label>
+        <input id="dest" name="dest" placeholder="Enter destination..." />
+      </div>
 
-    <script>
+      <button type="submit">Go</button>
+      <button type="button" id="resetBtn" class="secondary">Reset</button>
+    </form>
 
-        // Initialize and add the map
-        function initMap() {
+    <div class="mapWrap">
+      <img id="mapImage" src="images/blank_map.png" alt="Map" />
+    </div>
+  </div>
 
-            // The location of Geeksforgeeks office
-            const gfg_office = {
-                lat: 28.50231,
-                lng: 77.40548
-            };
+  <script>
+    const BLANK_SRC = "images/blank_map.png";
+    const ROUTES_SRC = "images/routes_map.png";
 
-            // Create the map, centered at gfg_office
-            const map = new google.maps.Map(
-                    document.getElementById("map"), {
+    const form = document.getElementById("routeForm");
+    const mapImage = document.getElementById("mapImage");
+    const resetBtn = document.getElementById("resetBtn");
 
-                // Set the zoom of the map
-                zoom: 17.56,
-                center: gfg_office,
-            });
-        }
-    </script>
+    // Ensure the blank map is shown on load
+    mapImage.src = BLANK_SRC;
+
+    // Clicking "Go" swaps to the routes map
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      mapImage.src = ROUTES_SRC;
+    });
+
+    // Reset back to blank
+    resetBtn.addEventListener("click", () => {
+      form.reset();
+      mapImage.src = BLANK_SRC;
+    });
+  </script>
 </body>
-
 </html>
