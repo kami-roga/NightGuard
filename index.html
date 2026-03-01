@@ -111,18 +111,12 @@
             </a>
         </div>
         <script>
-            // Function to update the clock
             function updateClock() {
                 const now = new Date();
-                // Use toLocaleTimeString() for a user-friendly format based on local settings
                 const timeString = now.toLocaleTimeString(); 
                 document.getElementById("clock").textContent = timeString;
             }
-
-            // Initial call to display time immediately
             updateClock();
-
-            // Update the time every second (1000 milliseconds)
             setInterval(updateClock, 1000);
         </script>
     </body>
